@@ -13,13 +13,21 @@ class App extends React.Component {
     height: 200
   }
 
-  handleSave = (data) => {
-    const img = this.editor.getImageScaledToCanvas().toDataURL()
-    const rect = this.editor.getCroppingRect()
+  constructor () {
+    super()
+    this.setEditorRef = null
+    this.editor = new Promise((res, rej) => this.setEditorRef = res)
+  }
 
-    this.setState({
-      preview: img,
-      croppingRect: rect
+  handleSave = (data) => {
+    return this.editor.then(editor => {
+      const img = editor.getImageScaledToCanvas().toDataURL()
+      const rect = editor.getCroppingRect()
+
+      this.setState({
+        preview: img,
+        croppingRect: rect
+      })
     })
   }
 
@@ -70,10 +78,6 @@ class App extends React.Component {
 
   logCallback (e) {
     console.log('callback', e)
-  }
-
-  setEditorRef = (editor) => {
-    if (editor) this.editor = editor
   }
 
   handlePositionChange = position => {
@@ -186,7 +190,7 @@ class App extends React.Component {
             height={200}
             image="avatar.jpg"
             rect={this.state.croppingRect}
-            style={{margin: '10px 24px 32px', padding: 5, border: '1px solid #CCC'}}
+            style={{ margin: '10px 24px 32px', padding: 5, border: '1px solid #CCC' }}
           />
           :
           null}
@@ -218,7 +222,7 @@ class ImageWithRect extends React.Component {
 
   handleImageLoad () {
     const ctx = this.canvas.getContext('2d')
-    const { image, rect, width, height} = this.props
+    const { image, rect, width, height } = this.props
 
     ctx.drawImage(this.imgElement, 0, 0, width, height)
 
