@@ -11,7 +11,8 @@ class App extends React.Component {
     borderRadius: 0,
     preview: null,
     width: 200,
-    height: 200
+    height: 200,
+    disabled: false,
   }
 
   handleNewImage = e => {
@@ -115,6 +116,7 @@ class App extends React.Component {
           onImageLoad={this.logCallback.bind(this, 'onImageLoad')}
           onDropFile={this.logCallback.bind(this, 'onDropFile')}
           image={this.state.image || 'avatar.jpg'}
+          disabled={this.state.disabled}
         />
         <br />
         New File:

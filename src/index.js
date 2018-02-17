@@ -136,7 +136,10 @@ class AvatarEditor extends React.Component {
     onMouseMove: PropTypes.func,
     onPositionChange: PropTypes.func,
 
-    disableDrop: PropTypes.bool
+    disableDrop: PropTypes.bool,
+       
+    disabled: PropTypes.bool,
+
   }
 
   static defaultProps = {
@@ -312,10 +315,24 @@ class AvatarEditor extends React.Component {
     const isLargerThanImage = width > 1 || height > 1
 
     if (isLargerThanImage) {
-      xMin = -croppingRect.width
-      xMax = 1
-      yMin = -croppingRect.height
-      yMax = 1
+      if (width > 1 && height > 1) {
+        xMin = -(croppingRect.width - 1)
+        xMax = 0
+        yMin = -(croppingRect.height - 1)
+        yMax = 0  
+      } else {
+        if (width > 1) {
+          xMin = -(croppingRect.width - 1)
+          xMax = 0
+          yMin = 0
+          yMax = 1 - croppingRect.height
+        } else {
+          xMin = 0
+          xMax = 1 - croppingRect.width
+          yMin = -(croppingRect.height - 1)
+          yMax = 0
+        }
+      }
     }
 
     return {
@@ -589,7 +606,7 @@ class AvatarEditor extends React.Component {
 
   handleMouseMove = (e) => {
     e = e || window.event
-    if (this.state.drag === false) {
+    if (this.state.drag === false || this.props.disabled) {
       return
     }
 
