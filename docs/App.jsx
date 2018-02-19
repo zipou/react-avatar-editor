@@ -12,7 +12,7 @@ class App extends React.Component {
     preview: null,
     width: 200,
     height: 200,
-    disabled: false,
+    disabled: false
   }
 
   handleNewImage = e => {
